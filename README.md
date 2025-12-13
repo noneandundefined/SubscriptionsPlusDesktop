@@ -1,7 +1,7 @@
 ﻿# Subscriptions+
 
 <p align="center">
-  <img src="https://github.com/noneandundefined/SubscriptionsPlusDesktop/blob/main/Public/assets/subinfo.png?raw=true" alt="SubscriptionsPlusDesktop Logo">
+  <img src="https://github.com/noneandundefined/SubscriptionsPlusDesktop/blob/main/Public/assets/subinfo.png?raw=true" alt="SubscriptionsPlusDesktop Logo" width="300">
 </p>
 
 `Subscriptions+` is an Android application designed to help users manage their subscriptions and recurring payments.
