@@ -15,7 +15,7 @@ namespace SubscriptionPlusDesktop.UI.Controllers
         {
             if (value is SubscriptionModel sub)
             {
-                string date = sub.DatePay.ToString("dd MMMM", CultureInfo.GetCultureInfo("ru-RU"));
+                string date = sub.DatePay.ToString("dd MMMM", new CultureInfo("ru-RU"));
                 string price = $"{sub.Price} руб.";
                 return $"{date} / {price}";
             }

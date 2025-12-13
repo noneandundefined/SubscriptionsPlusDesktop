@@ -3,7 +3,7 @@
 
 #define AppId "{{A4C5B89C-92D3-4AF9-BE3E-74B3D0C31402}}"
 #define AppName "SubscriptionPlus"
-#define AppVersion "1.0.0"
+#define AppVersion "1.2.0"
 #define AlphaVersion "0"
 #define AppDisplayName "SubscriptionPlusDesktop"
 #define AppPublisher "SubscriptionPlusDesktop"

@@ -1,10 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SubscriptionPlusDesktop.Services;
-using System;
-using System.Collections.Generic;
+using SubscriptionPlusDesktop.Services.NLP;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTests
 {

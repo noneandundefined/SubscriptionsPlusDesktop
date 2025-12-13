@@ -1,6 +1,7 @@
 ﻿using SubscriptionPlusDesktop.Models;
 using SubscriptionPlusDesktop.Repository;
 using SubscriptionPlusDesktop.Services;
+using SubscriptionPlusDesktop.Services.NLP;
 using SubscriptionPlusDesktop.UI.Components;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace SubscriptionPlusDesktop.ViewModel
     public class SubViewModel : INotifyPropertyChanged
     {
         private readonly ISubscriptionRepository _subRepository = new SubscriptionRepository();
+        private readonly NLPBuilder _nlpBuilder = new NLPBuilder();
 
         public ObservableCollection<SubscriptionModel> Subscriptions { get; set; }
         public ObservableCollection<SubscriptionModel> FilteredSubscriptions { get; set; }
@@ -89,7 +91,38 @@ namespace SubscriptionPlusDesktop.ViewModel
         {
             if (this.Subscriptions == null) return;
 
-            var filtered = string.IsNullOrWhiteSpace(this.SearchText) ? this.Subscriptions : this.Subscriptions.Where(s => s.Name != null && s.Name.IndexOf(this.SearchText, StringComparison.OrdinalIgnoreCase) >= 0);
+            IEnumerable<SubscriptionModel> filtered;
+
+            if (string.IsNullOrWhiteSpace(this.SearchText))
+            {
+                filtered = this.Subscriptions;
+            }
+            else
+            {
+                List<string> searchTerms = this._nlpBuilder.Preprocess(this.SearchText);
+
+                if (searchTerms.Any())
+                {
+                    int fuzzyThreshold = 1;
+
+                    filtered = this.Subscriptions.Where(s =>
+                    {
+                        if (s.Name == null) return false;
+
+                        List<string> subscriptionNameTerms = this._nlpBuilder.Preprocess(s.Name);
+
+                        return searchTerms.Any(searchTerm =>
+                            subscriptionNameTerms.Any(subTerm =>
+                                this._nlpBuilder.IsFuzzyMatch(searchTerm, subTerm, fuzzyThreshold)
+                            )
+                        );
+                    });
+                }
+                else
+                {
+                    filtered = this.Subscriptions.Where(s => s.Name != null && s.Name.IndexOf(this.SearchText, StringComparison.OrdinalIgnoreCase) >= 0);
+                }
+            }
 
             this.FilteredSubscriptions.Clear();
             foreach (var sub in filtered)

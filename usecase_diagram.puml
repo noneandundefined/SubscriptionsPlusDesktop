@@ -1,0 +1,42 @@
+@startuml
+left to right direction
+
+actor Пользователь as user
+
+rectangle "Система управления подписками" {
+    usecase "Добавить подписку" as add_sub
+    usecase "Редактировать подписку" as edit_sub
+    usecase "Просмотреть подписки" as view_sub
+    usecase "Удалить подписку" as delete_sub
+    usecase "Фильтровать подписки" as filter_sub
+    usecase "Сортировать подписки" as sort_sub
+    usecase "Просмотреть общую стоимость подписок" as view_total
+    usecase "Отобразить иконку подписки" as show_icon
+    usecase "Подтвердить удаление" as confirm_delete
+    usecase "Отобразить детали подписки" as view_details
+    usecase "Поиск по дополнительным параметрам" as filter_advanced
+    usecase "Выбрать способ оплаты" as choose_payment
+}
+
+user --> add_sub
+user --> edit_sub
+user --> view_sub
+user --> delete_sub
+user --> filter_sub
+user --> view_total
+
+view_sub <.. sort_sub : extends
+view_sub <.. show_icon : extends
+view_sub <.. view_details : extends
+
+filter_sub <.. filter_advanced : extends
+
+add_sub <.. choose_payment : extends
+edit_sub <.. choose_payment : extends
+
+delete_sub <.. confirm_delete : includes
+
+edit_sub <.. view_sub : includes
+delete_sub <.. view_sub : includes
+
+@enduml

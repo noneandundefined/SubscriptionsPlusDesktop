@@ -46,7 +46,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="Добавление подписки" 
+                            <TextBlock Text="Редактирование подписки" 
                                        Grid.Column="0" 
                                        Foreground="#000"
                                        FontWeight="Medium"
