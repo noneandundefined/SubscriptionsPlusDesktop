@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="SubscriptionPlusDesktop.csproj" Id="4dace7e0-3eae-4495-9c15-a68efdaae4a6" />
+  <Project Path="UnitTests/UnitTests.csproj" Id="6520d1e7-6d30-4869-8315-18209e19e4b9" />
+</Solution>

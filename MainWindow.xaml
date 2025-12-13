@@ -1,0 +1,126 @@
+﻿<Window x:Class="SubscriptionPlusDesktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SubscriptionPlusDesktop"
+        xmlns:vm="clr-namespace:SubscriptionPlusDesktop.ViewModel"
+        xmlns:components="clr-namespace:SubscriptionPlusDesktop.UI.Components"
+        mc:Ignorable="d"
+        Icon="pack://application:,,,/Public/assets/subplus-x50.ico"
+        Title="Subscriptions" 
+        Height="550" Width="550" MinHeight="650" MinWidth="600"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+    <Window.DataContext>
+        <vm:SubViewModel />
+    </Window.DataContext>
+
+    <Border Background="#F0FFFFFF" CornerRadius="13" BorderBrush="#f2f2f2" BorderThickness="1">
+        <Grid>
+            <Border CornerRadius="13,13,0,0" Height="27" Background="#f2f2f2" VerticalAlignment="Top" MouseDown="TitleBar_MouseDown">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Width="40"
+                            Cursor="Arrow"
+                            BorderThickness="0"
+                            Click="Minimize_Click">
+
+                        <Image Source="pack://application:,,,/Public/ico/minus.png" 
+                               MaxWidth="13" 
+                               Margin="0,7,0,0" 
+                               Opacity="0.8"
+                               RenderOptions.BitmapScalingMode="HighQuality"/>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border"
+                                        Background="Transparent">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#ccc"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <Button Width="40"
+                            Cursor="Arrow"
+                            BorderThickness="0"
+                            Click="Maximize_Click">
+
+                        <Image Source="pack://application:,,,/Public/ico/squircle.png" 
+                               MaxWidth="11" 
+                               Opacity="0.8"
+                               RenderOptions.BitmapScalingMode="HighQuality"/>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border"
+                                        Background="Transparent">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#ccc"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <Button Width="40"
+                            Cursor="Arrow"
+                            BorderThickness="0"
+                            Click="Close_Click">
+
+                        <Image Source="pack://application:,,,/Public/ico/x.png" 
+                               MaxWidth="13" 
+                               Opacity="0.8"
+                               RenderOptions.BitmapScalingMode="HighQuality"/>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border"
+                                        Background="Transparent"
+                                        CornerRadius="0,13,0,0">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#fa5252"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <Grid Margin="0,27,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Create Sub Modal -->
+                <components:CreateSubModal x:Name="CreateSubModal" Grid.RowSpan="3" Panel.ZIndex="1000" />
+
+                <!-- Edit Sub Modal -->
+                <components:EditSubModal x:Name="EditSubModal" Grid.RowSpan="3" Panel.ZIndex="1000" />
+
+                <components:Header Grid.Row="0" />
+
+                <components:SubList Grid.Row="1" />
+
+                <components:ActionButtons Grid.Row="2" />
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

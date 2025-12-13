@@ -1,0 +1,185 @@
+﻿<UserControl x:Class="SubscriptionPlusDesktop.UI.Components.EditSubModal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SubscriptionPlusDesktop.UI.Components"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="650"
+             Visibility="Collapsed"
+             Opacity="0">
+    <Grid x:Name="Root"
+          Background="#80000000"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          MouseDown="Root_MouseDown">
+
+        <Border x:Name="Dialog"
+                Background="#fff"
+                BorderBrush="#999"
+                BorderThickness="1"
+                CornerRadius="12"
+                Width="450"
+                MaxWidth="450"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
+            </Border.Effect>
+
+            <Grid>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Padding="20,15,15,15" BorderBrush="#ccc" BorderThickness="0,0,0,1" Margin="0,0,0,20">
+                        <Grid VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Добавление подписки" 
+                                       Grid.Column="0" 
+                                       Foreground="#000"
+                                       FontWeight="Medium"
+                                       FontSize="15"/>
+
+                            <Image Grid.Column="1" 
+                                   Source="pack://application:,,,/Public/ico/x.png" 
+                                   MaxWidth="19" 
+                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Top"
+                                   MouseLeftButtonUp="Close_Click"
+                                   Cursor="Hand">
+
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Setter Property="Opacity" Value="1"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Opacity" Value="0.6"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+
+                            </Image>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="1" Padding="15,0,15,15">
+                        <StackPanel>
+                            <TextBlock Text="Название подписки" 
+                                       Foreground="#777"
+                                       FontWeight="Medium"
+                                       FontSize="13"
+                                       Margin="0,0,0,5"/>
+
+                            <Border Background="#fff"
+                                    BorderBrush="#ccc"
+                                    BorderThickness="1"
+                                    CornerRadius="6" 
+                                    Padding="4">
+                                <Grid>
+                                    <TextBox x:Name="SubNameBox"
+                                             Background="Transparent" 
+                                             Foreground="#000"
+                                             BorderThickness="0"
+                                             FontSize="14" 
+                                             Padding="3"
+                                             CaretBrush="#000"/>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="2" Padding="15,0,15,15">
+                        <StackPanel>
+                            <TextBlock Text="Стоимость подписки" 
+                                       Foreground="#777"
+                                       FontWeight="Medium"
+                                       FontSize="13"
+                                       Margin="0,0,0,5"/>
+
+                            <Border Background="#fff"
+                                    BorderBrush="#ccc"
+                                    BorderThickness="1"
+                                    CornerRadius="6" 
+                                    Padding="4">
+                                <Grid>
+                                    <TextBox x:Name="SubPriceBox"
+                                             Background="Transparent" 
+                                             Foreground="#000"
+                                             BorderThickness="0"
+                                             FontSize="14" 
+                                             Padding="3"
+                                             CaretBrush="#000"/>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="3" Padding="15,0,15,15">
+                        <StackPanel>
+                            <TextBlock Text="Дата платежа подписки" 
+                                       Foreground="#777"
+                                       FontWeight="Medium"
+                                       FontSize="13"
+                                       Margin="0,0,0,5"/>
+
+                            <Border Background="#fff"
+                                    BorderBrush="#ccc"
+                                    BorderThickness="1"
+                                    CornerRadius="6" 
+                                    Padding="4">
+                                <Grid>
+                                    <DatePicker x:Name="SubDatePayPicker"
+                                                Background="Transparent"
+                                                Foreground="#000"
+                                                BorderThickness="0"
+                                                FontSize="14"
+                                                SelectedDate="{x:Static sys:DateTime.Now}"
+                                                HorizontalContentAlignment="Stretch"
+                                                VerticalContentAlignment="Stretch"/>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="4" Margin="15,0,15,15"
+                            CornerRadius="6"
+                            Padding="10"
+                            Cursor="Hand"
+                            MouseLeftButtonUp="EditSub_MouseLeftButtonUp">
+                        <TextBlock Text="Изменить" 
+                               Foreground="#fff"
+                               TextAlignment="Center"
+                               FontWeight="Medium"
+                               FontSize="13"/>
+
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="#000" />
+
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#222" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
