@@ -21,6 +21,13 @@ namespace UnitTests
         [DataRow("Spotify Premium", "spotify.jpg")]
         [DataRow("Netflix Ultra", "netflix.jpg")]
         [DataRow("Telegram Premium", "tg.png")]
+        [DataRow("Вернуть долг", "money.png")]
+        [DataRow("Тинкоф Про", "tbank.jpg")]
+        [DataRow("T-Pro", "tbank.jpg")]
+        [DataRow("гугл подписка", "googleone.jpg")]
+        [DataRow("adobe ПОДписка", "adobe.jpg")]
+        [DataRow("adobe ПРО", "adobe.jpg")]
+        [DataRow("steam подписка", "steam.png")]
         public void GetSubscriptionImage_KnownSubscription_ReturnsImage(string input, string expected)
         {
             var result = this._service.GetSubscriptionImage(input);

@@ -109,7 +109,7 @@ namespace SubscriptionPlusDesktop.Services
             {
                 Keywords = new List<string>
                 {
-                    "google one", "гугл one", "гугл подписка", "google диск", "google storage", "google облако"
+                    "google one", "гугл one", "гугл подписка", "google диск", "google storage", "google облако", "google"
                 },
                 Image = "googleone.jpg"
             },
