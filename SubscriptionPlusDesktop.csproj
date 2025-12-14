@@ -125,6 +125,7 @@
     <Compile Include="UI\Components\SubList.xaml.cs">
       <DependentUpon>SubList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controllers\EqualsConverter.cs" />
     <Compile Include="UI\Controllers\GreetingTimeConverter.cs" />
     <Compile Include="UI\Controllers\StringToVisibilityConverter.cs" />
     <Compile Include="UI\Controllers\SubscriptionDisplayConverter.cs" />

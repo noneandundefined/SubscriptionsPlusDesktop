@@ -11,15 +11,92 @@
     <UserControl.Resources>
         <controllers:SubscriptionDisplayConverter x:Key="SubscriptionDisplayConverter" />
         <controllers:SubscriptionImageConverter x:Key="SubscriptionImageConverter"/>
+        <controllers:EqualsConverter x:Key="EqualsConverter"/>
     </UserControl.Resources>
     
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" VerticalAlignment="Center" Margin="20,15,20,15">
+        <ListBox ItemsSource="{Binding Categories}" 
+                 SelectedItem="{Binding SelectedCategory}" Grid.Row="0"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                 HorizontalAlignment="Left" Margin="15,10"
+                 BorderThickness="0" Background="Transparent">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Margin" Value="0"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border x:Name="Bd"
+                                        Background="{TemplateBinding Background}"
+                                        BorderThickness="0"
+                                        SnapsToDevicePixels="True">
+                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="Transparent"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="Transparent"/>
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="Bd" Property="Opacity" Value="0.5"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="10,5" Margin="8,0,2,0" CornerRadius="14" Cursor="Hand" MouseLeftButtonUp="Category_Click">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="#000"/>
+                                <Setter Property="BorderBrush" Value="#000"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                        <Setter Property="Background" Value="#444"/>
+                                        <Setter Property="BorderBrush" Value="#444"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        
+                        <TextBlock Text="{Binding}" Foreground="White" FontWeight="Medium"/>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Grid Grid.Row="1" VerticalAlignment="Center" Margin="20,15,20,15">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -43,7 +120,7 @@
             </StackPanel>
         </Grid>
 
-        <TextBlock Grid.Row="1"
+        <TextBlock Grid.Row="2"
                    Text="У вас нет активных подписок"
                    Foreground="#828282"
                    FontSize="14"
@@ -62,7 +139,7 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <ListBox Grid.Row="1"
+        <ListBox Grid.Row="2"
                  ItemsSource="{Binding FilteredSubscriptions}" 
                  SelectedItem="{Binding SelectedSubscription}" 
                  Background="Transparent" 

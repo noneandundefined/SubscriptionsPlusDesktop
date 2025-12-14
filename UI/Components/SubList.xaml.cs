@@ -52,5 +52,16 @@ namespace SubscriptionPlusDesktop.UI.Components
                 EditSubModal.Show(sub);
             }
         }
+
+        private void Category_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Border border && border.DataContext is string category)
+            {
+                if (DataContext is SubViewModel vm)
+                {
+                    vm.ToggleCategory(category);
+                }
+            }
+        }
     }
 }
