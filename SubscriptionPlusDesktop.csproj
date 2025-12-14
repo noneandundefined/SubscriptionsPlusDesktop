@@ -103,6 +103,7 @@
     </ApplicationDefinition>
     <Compile Include="Core\Config.cs" />
     <Compile Include="Interface\ISubscriptionRepository.cs" />
+    <Compile Include="Models\SubscriptionCategories.cs" />
     <Compile Include="Models\SubscriptionImageModel.cs" />
     <Compile Include="Repository\SubscriptionRepository.cs" />
     <Compile Include="Services\Logger.cs" />
@@ -258,6 +259,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Resource Include="LICENSE-2.0.txt" />
     <None Include="README.md" />
     <Resource Include="Public\assets\subinfo.png" />
   </ItemGroup>

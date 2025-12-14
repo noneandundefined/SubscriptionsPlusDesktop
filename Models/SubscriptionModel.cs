@@ -40,6 +40,14 @@ namespace SubscriptionPlusDesktop.Models
             set => this.Set(ref this._price, value);
         }
 
+        private string _category;
+        [JsonPropertyName("category")]
+        public string Category
+        {
+            get => this._category;
+            set => this.Set(ref this._category, value);
+        }
+
         private DateTime _datePay;
         [JsonPropertyName("date_time")]
         public DateTime DatePay

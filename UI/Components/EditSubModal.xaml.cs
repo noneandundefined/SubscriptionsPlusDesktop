@@ -36,6 +36,8 @@ namespace SubscriptionPlusDesktop.UI.Components
         {
             InitializeComponent();
 
+            CategoryComboBox.ItemsSource = SubscriptionCategories.Categories;
+
             _instance = this;
         }
 
@@ -83,6 +85,20 @@ namespace SubscriptionPlusDesktop.UI.Components
                 _instance.SubPriceBox.Text = sub.Price.ToString();
                 _instance.SubDatePayPicker.SelectedDate = sub.DatePay;
 
+                // category
+                if (SubscriptionCategories.Categories.Contains(sub.Category))
+                {
+                    _instance.CategoryComboBox.SelectedItem = sub.Category;
+                    _instance.CustomCategoryBorder.Visibility = Visibility.Collapsed;
+                    _instance.CustomCategoryTextBox.Text = string.Empty;
+                }
+                else
+                {
+                    _instance.CategoryComboBox.SelectedItem = "Другое";
+                    _instance.CustomCategoryBorder.Visibility = Visibility.Visible;
+                    _instance.CustomCategoryTextBox.Text = sub.Category;
+                }
+
                 _instance.Visibility = Visibility.Visible;
                 var fadeIn = new DoubleAnimation(0, 1, new Duration(TimeSpan.FromMilliseconds(100)));
                 _instance.BeginAnimation(OpacityProperty, fadeIn);
@@ -105,12 +121,42 @@ namespace SubscriptionPlusDesktop.UI.Components
             });
         }
 
+        private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            CategoryComboBox.IsDropDownOpen = !CategoryComboBox.IsDropDownOpen;
+        }
+
+        private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((CategoryComboBox.SelectedItem as string) == "Другое")
+            {
+                CustomCategoryBorder.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                CustomCategoryBorder.Visibility = Visibility.Collapsed;
+                CustomCategoryTextBox.Text = string.Empty;
+            }
+        }
+
         private void EditSub_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             try
             {
+                string category;
+
+                if ((CategoryComboBox.SelectedItem as string) == "Другое")
+                {
+                    category = CustomCategoryTextBox.Text;
+                }
+                else
+                {
+                    category = CategoryComboBox.SelectedItem as string;
+                }
+
                 _editingSub.Name = SubNameBox.Text;
                 _editingSub.Price = decimal.Parse(SubPriceBox.Text);
+                _editingSub.Category = category;
                 _editingSub.DatePay = SubDatePayPicker.SelectedDate?.Date ?? DateTime.Now.AddMonths(1);
                 _editingSub.AutoRenewal = _editingSub.DatePay;
 

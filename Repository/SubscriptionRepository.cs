@@ -13,27 +13,40 @@ namespace SubscriptionPlusDesktop.Repository
 {
     public class SubscriptionRepository : ISubscriptionRepository
     {
+        private bool Validate(SubscriptionModel model)
+        {
+            if (model.DatePay <= DateTime.Today)
+            {
+                MessageBox.Show("Дата платежа должна быть в будущем.", "Ошибка создания подписки", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Name))
+            {
+                MessageBox.Show("Название подписки не может быть пустым.", "Ошибка создании подписки", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (model.Name.Length > 100)
+            {
+                MessageBox.Show("Название подписки не может быть длиннее 100 символов.", "Ошибка создании подписки", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (model.Price < 0)
+            {
+                MessageBox.Show("Платёж подписки не может быть отрицательным.", "Ошибка создании подписки", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            return true;
+        }
+
         public void Add(SubscriptionModel model)
         {
             try
             {
-                if (model.DatePay <= DateTime.Today)
-                {
-                    MessageBox.Show("Дата платежа должна быть в будущем.", "Ошибка создания подписки", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-
-                if (string.IsNullOrWhiteSpace(model.Name))
-                {
-                    MessageBox.Show("Название подписки не может быть пустым.", "Ошибка создании подписки", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-
-                if (model.Name.Length > 100)
-                {
-                    MessageBox.Show("Название подписки не может быть длиннее 100 символов.", "Ошибка создании подписки", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
+                if (!this.Validate(model)) return;
 
                 var subs = this.Load();
 
@@ -121,23 +134,7 @@ namespace SubscriptionPlusDesktop.Repository
         {
             try
             {
-                if (updated.DatePay <= DateTime.Today)
-                {
-                    MessageBox.Show("Дата платежа должна быть в будущем.", "Ошибка создания подписки", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return false;
-                }
-
-                if (string.IsNullOrWhiteSpace(updated.Name))
-                {
-                    MessageBox.Show("Название подписки не может быть пустым.", "Ошибка создании подписки", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return false;
-                }
-
-                if (updated.Name.Length > 100)
-                {
-                    MessageBox.Show("Название подписки не может быть длиннее 100 символов.", "Ошибка создании подписки", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return false;
-                }
+                if (!this.Validate(updated)) return false;
 
                 var subs = this.Load();
                 var index = subs.FindIndex(s => s.Id == updated.Id);
@@ -153,6 +150,21 @@ namespace SubscriptionPlusDesktop.Repository
             {
                 Logger.Error(ex.Message);
                 return false;
+            }
+        }
+
+        public string[] GetAllCategories()
+        {
+            try
+            {
+                var subs = this.Load();
+
+                return subs.Where(s => !string.IsNullOrWhiteSpace(s.Category)).Select(s => s.Category).Distinct().OrderBy(c => c).ToArray();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+                return Array.Empty<string>();
             }
         }
     }

@@ -40,7 +40,7 @@ namespace SubscriptionPlusDesktop.UI.Components
                 if (DataContext is SubViewModel vm)
                 {
                     this._subRepository.Delete(sub.Id);
-                    vm.Subscriptions.Remove(sub);
+                    vm.FilteredSubscriptions.Remove(sub);
                 }
             }
         }

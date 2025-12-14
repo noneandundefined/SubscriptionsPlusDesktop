@@ -71,7 +71,17 @@
                  PreviewMouseWheel="ListBox_PreviewMouseWheel" 
                  ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
                  ScrollViewer.VerticalScrollBarVisibility="Hidden" 
-                 SelectionMode="Single">
+                 SelectionMode="Single"
+                 
+                 VirtualizingPanel.IsVirtualizing="True"
+                 VirtualizingPanel.VirtualizationMode="Recycling"
+                 ScrollViewer.CanContentScroll="True">
+
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
 
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">

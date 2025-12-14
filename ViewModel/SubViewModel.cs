@@ -21,7 +21,7 @@ namespace SubscriptionPlusDesktop.ViewModel
         private readonly ISubscriptionRepository _subRepository = new SubscriptionRepository();
         private readonly NLPBuilder _nlpBuilder = new NLPBuilder();
 
-        public ObservableCollection<SubscriptionModel> Subscriptions { get; set; }
+        private List<SubscriptionModel> _allSubscriptions;
         public ObservableCollection<SubscriptionModel> FilteredSubscriptions { get; set; }
 
         public SubscriptionModel SelectedSubscription { get; set; }
@@ -44,25 +44,17 @@ namespace SubscriptionPlusDesktop.ViewModel
 
         public SubViewModel()
         {
-            var subs = this._subRepository.Load();
-            this.Subscriptions = new ObservableCollection<SubscriptionModel>(subs.OrderBy(s => s.DatePay));
-
-            this.FilteredSubscriptions = new ObservableCollection<SubscriptionModel>(this.Subscriptions);
-
-            Subscriptions.CollectionChanged += (_, __) =>
-            {
-                OnPropertyChanged(nameof(SubscriptionsCount));
-                OnPropertyChanged(nameof(HasSubscriptions));
-            };
+            this._allSubscriptions = this._subRepository.Load().OrderBy(s => s.DatePay).ToList();
+            this.FilteredSubscriptions = new ObservableCollection<SubscriptionModel>(this._allSubscriptions);
 
             //events, added
             CreateSubModal.OnSubscriptionAdded += (sub) =>
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    this.Subscriptions.Add(sub);
+                    this._allSubscriptions.Add(sub);
+                    sub.PropertyChanged += this.Subscription_PropertyChanged;
                     this.ApplyFilter();
-                    this.SortSubscriptions();
                 });
             };
 
@@ -71,17 +63,17 @@ namespace SubscriptionPlusDesktop.ViewModel
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    var index = Subscriptions.IndexOf(sub);
+                    var index = this._allSubscriptions.IndexOf(this._allSubscriptions.FirstOrDefault(s => s.Id == sub.Id));
                     if (index >= 0)
                     {
-                        this.Subscriptions[index] = sub;
+                        this._allSubscriptions[index] = sub;
+                        sub.PropertyChanged += this.Subscription_PropertyChanged;
                         this.ApplyFilter();
-                        this.SortSubscriptions();
                     }
                 });
             };
 
-            foreach (var sub in Subscriptions)
+            foreach (var sub in this._allSubscriptions)
             {
                 sub.PropertyChanged += this.Subscription_PropertyChanged;
             }
@@ -89,13 +81,13 @@ namespace SubscriptionPlusDesktop.ViewModel
 
         private void ApplyFilter()
         {
-            if (this.Subscriptions == null) return;
+            if (this._allSubscriptions == null) return;
 
             IEnumerable<SubscriptionModel> filtered;
 
             if (string.IsNullOrWhiteSpace(this.SearchText))
             {
-                filtered = this.Subscriptions;
+                filtered = this._allSubscriptions;
             }
             else
             {
@@ -105,7 +97,7 @@ namespace SubscriptionPlusDesktop.ViewModel
                 {
                     int fuzzyThreshold = 1;
 
-                    filtered = this.Subscriptions.Where(s =>
+                    filtered = this._allSubscriptions.Where(s =>
                     {
                         if (s.Name == null) return false;
 
@@ -120,12 +112,12 @@ namespace SubscriptionPlusDesktop.ViewModel
                 }
                 else
                 {
-                    filtered = this.Subscriptions.Where(s => s.Name != null && s.Name.IndexOf(this.SearchText, StringComparison.OrdinalIgnoreCase) >= 0);
+                    filtered = this._allSubscriptions.Where(s => s.Name != null && s.Name.IndexOf(this.SearchText, StringComparison.OrdinalIgnoreCase) >= 0);
                 }
             }
 
             this.FilteredSubscriptions.Clear();
-            foreach (var sub in filtered)
+            foreach (var sub in filtered.OrderBy(s => s.DatePay))
             {
                 this.FilteredSubscriptions.Add(sub);
             }
@@ -141,50 +133,17 @@ namespace SubscriptionPlusDesktop.ViewModel
             return subImageService.GetSubscriptionImage(sub.Name);
         }
 
-        public int SubscriptionsCount => this.Subscriptions.Count;
+        public int SubscriptionsCount => this.FilteredSubscriptions.Count;
 
-        public bool HasSubscriptions => this.Subscriptions.Any();
+        public bool HasSubscriptions => this.FilteredSubscriptions.Any();
 
-        public decimal TotalPerMonth => this.Subscriptions.Sum(s => s.Price);
-
-        private void Subscriptions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged(nameof(this.SubscriptionsCount));
-            OnPropertyChanged(nameof(this.TotalPerMonth));
-
-            if (e.NewItems != null)
-            {
-                foreach (SubscriptionModel sub in e.NewItems)
-                {
-                    sub.PropertyChanged += this.Subscription_PropertyChanged;
-                }
-            }
-
-            if (e.OldItems != null)
-            {
-                foreach (SubscriptionModel sub in e.OldItems)
-                {
-                    sub.PropertyChanged -= this.Subscription_PropertyChanged;
-                }
-            }
-        }
+        public decimal TotalPerMonth => this.FilteredSubscriptions.Sum(s => s.Price);
 
         private void Subscription_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(SubscriptionModel.Price))
             {
                 OnPropertyChanged(nameof(this.TotalPerMonth));
-            }
-        }
-
-        private void SortSubscriptions()
-        {
-            var sorted = Subscriptions.OrderBy(s => s.DatePay).ToList();
-
-            Subscriptions.Clear();
-            foreach (var sub in sorted)
-            {
-                Subscriptions.Add(sub);
             }
         }
 

@@ -19,6 +19,8 @@ namespace SubscriptionPlusDesktop
 
         bool Update(SubscriptionModel updated);
 
+        string[] GetAllCategories();
+
         bool Delete(ulong id);
     }
 }

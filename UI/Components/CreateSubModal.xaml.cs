@@ -35,6 +35,8 @@ namespace SubscriptionPlusDesktop.UI.Components
         {
             InitializeComponent();
 
+            CategoryComboBox.ItemsSource = SubscriptionCategories.Categories;
+
             _instance = this;
         }
 
@@ -98,15 +100,46 @@ namespace SubscriptionPlusDesktop.UI.Components
             });
         }
 
+        private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((CategoryComboBox.SelectedItem as string) == "Другое")
+            {
+                CustomCategoryBorder.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                CustomCategoryBorder.Visibility = Visibility.Collapsed;
+                CustomCategoryTextBox.Text = string.Empty;
+            }
+        }
+
+        private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            CategoryComboBox.IsDropDownOpen = !CategoryComboBox.IsDropDownOpen;
+        }
+
         private void AddSub_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             try
             {
+                string category;
+
+                if ((CategoryComboBox.SelectedItem as string) == "Другое")
+                {
+                    category = CustomCategoryTextBox.Text;
+                }
+                else
+                {
+                    category = CategoryComboBox.SelectedItem as string;
+                }
+
+
                 var newSub = new SubscriptionModel
                 {
                     CreatedAt = DateTime.Now,
                     Name = SubNameBox.Text,
                     Price = Decimal.Parse(SubPriceBox.Text),
+                    Category = category,
                     DatePay = SubDatePayPicker.SelectedDate ?? DateTime.Now.AddMonths(1),
                     AutoRenewal = SubDatePayPicker.SelectedDate ?? DateTime.Now.AddMonths(1)
                 };
@@ -117,6 +150,9 @@ namespace SubscriptionPlusDesktop.UI.Components
 
                 SubNameBox.Text = string.Empty;
                 SubPriceBox.Text = string.Empty;
+                CategoryComboBox.SelectedItem = null;
+                CustomCategoryTextBox.Text = string.Empty;
+                CustomCategoryBorder.Visibility = Visibility.Collapsed;
                 SubDatePayPicker.Text = string.Empty;
 
                 HideOverlay();

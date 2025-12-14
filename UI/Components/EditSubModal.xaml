@@ -37,6 +37,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Border Grid.Row="0" Padding="20,15,15,15" BorderBrush="#ccc" BorderThickness="0,0,0,1" Margin="0,0,0,20">
@@ -155,7 +156,86 @@
                         </StackPanel>
                     </Border>
 
-                    <Border Grid.Row="4" Margin="15,0,15,15"
+                    <Border Grid.Row="4" Padding="15,0,15,15">
+                        <StackPanel>
+                            <TextBlock Text="Категория подписки" 
+                                       Foreground="#777"
+                                       FontWeight="Medium"
+                                       FontSize="13"
+                                       Margin="0,0,0,5"/>
+
+                            <ComboBox x:Name="CategoryComboBox"
+                                      Background="#fff"
+                                      Foreground="#000"
+                                      BorderBrush="#ccc"
+                                      Padding="14"
+                                      BorderThickness="1"
+                                      FontSize="14"
+                                      SelectionChanged="CategoryComboBox_SelectionChanged">
+
+                                <ComboBox.ItemContainerStyle>
+                                    <Style TargetType="ComboBoxItem">
+                                        <Setter Property="Padding" Value="6,4"/>
+                                    </Style>
+                                </ComboBox.ItemContainerStyle>
+
+                                <ComboBox.Template>
+                                    <ControlTemplate TargetType="ComboBox">
+                                        <Grid>
+                                            <Border Background="White"
+                                                    BorderBrush="#ccc"
+                                                    BorderThickness="1"
+                                                    Padding="16"
+                                                    CornerRadius="6"
+                                                    MouseLeftButtonUp="Border_MouseLeftButtonUp"
+                                                    Cursor="Hand"/>
+
+                                            <ContentPresenter Margin="6,2,25,2"
+                                                              VerticalAlignment="Center"
+                                                              HorizontalAlignment="Left"
+                                                              Content="{TemplateBinding SelectionBoxItem}"/>
+
+                                            <Popup Placement="Bottom"
+                                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                                   AllowsTransparency="True"
+                                                   HorizontalAlignment="Stretch"
+                                                   Focusable="False"
+                                                   PopupAnimation="Slide"
+                                                   MinWidth="{TemplateBinding ActualWidth}">
+                                                <Border Background="White"
+                                                        BorderBrush="#ccc"
+                                                        BorderThickness="1"
+                                                        CornerRadius="6">
+                                                    <ScrollViewer Margin="4" SnapsToDevicePixels="True">
+                                                        <StackPanel IsItemsHost="True"/>
+                                                    </ScrollViewer>
+                                                </Border>
+                                            </Popup>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </ComboBox.Template>
+                            </ComboBox>
+
+                            <Border x:Name="CustomCategoryBorder" 
+                                    Background="#fff" 
+                                    BorderBrush="#ccc" 
+                                    BorderThickness="1" 
+                                    CornerRadius="6" 
+                                    Padding="4" 
+                                    Margin="0,5,0,0" 
+                                    Visibility="Collapsed">
+                                <TextBox x:Name="CustomCategoryTextBox"
+                                         Background="Transparent"
+                                         Foreground="#000"
+                                         BorderThickness="0"
+                                         FontSize="14"
+                                         Padding="3"
+                                         CaretBrush="#000"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="5" Margin="15,0,15,15"
                             CornerRadius="6"
                             Padding="10"
                             Cursor="Hand"
